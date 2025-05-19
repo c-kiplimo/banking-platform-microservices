@@ -1,0 +1,49 @@
+server:
+  port: 9002
+customer:
+  service:
+    url: http://localhost:9001
+eureka:
+  eureka:
+    instance:
+      hostname: localhost  # or your machine IP address, e.g. 127.0.0.1 or 192.168.x.x
+      prefer-ip-address: true
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+    register-with-eureka: true
+    fetch-registry: true
+spring:
+  r2dbc:
+    url: r2dbc:postgresql://localhost:5432/account?schema=account&prepareThreshold=0
+    username: ${DB_USERNAME:postgres}
+    password: ${DB_PASSWORD:smartcode}
+    properties:
+      schema: account
+      pool:
+        initial-size: 10
+        max-size: 30
+        max-idle-time: 30m
+        validation-query: SELECT 1
+      connect-timeout: 10s
+      statement-timeout: 30s
+      lock-wait-timeout: 30s
+  flyway:
+    user: ${DB_USERNAME:postgres}
+    password: ${DB_PASSWORD:smartcode}
+    enabled: true
+    validate-on-migrate: false
+    baseline-on-migrate: true
+    locations: ${FLYWAY_MIGRATION_LOCATIONS:classpath:db/migration}
+    fail-on-missing-locations: true
+    schemas: ${DATABASE_NAME:account}
+    table: flyway_schema_history
+    connect-retries: 3
+    connect-retries-interval: 60
+    repair: true
+    ignore-migration-patterns:
+    url: jdbc:postgresql://localhost:5432/account?schema=account
+
+
+
+

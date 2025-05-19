@@ -1,0 +1,48 @@
+server:
+  port: 9001
+
+spring:
+  application:
+    name: customer-service
+
+  r2dbc:
+    url: r2dbc:postgresql://localhost:5432/customer?schema=customer&prepareThreshold=0
+    username: ${DB_USERNAME:postgres}
+    password: ${DB_PASSWORD:smartcode}
+
+  flyway:
+    url: jdbc:postgresql://localhost:5432/customer?currentSchema=customer
+    user: ${DB_USERNAME:postgres}
+    password: ${DB_PASSWORD:smartcode}
+    enabled: true
+    validate-on-migrate: false
+    baseline-on-migrate: true
+    locations: ${FLYWAY_MIGRATION_LOCATIONS:classpath:db/migration}
+    fail-on-missing-locations: true
+    schemas: ${DATABASE_NAME:customer}
+    table: flyway_schema_history
+    connect-retries: 3
+    connect-retries-interval: 60
+    repair: true
+    ignore-migration-patterns: ''
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+    register-with-eureka: true
+    fetch-registry: true
+  instance:
+    prefer-ip-address: true
+    ip-address: 127.0.0.1
+    hostname: localhost
+    instance-id: ${spring.application.name}:${random.value}
+logging:
+  level:
+    root: INFO
+    org.springframework.web: DEBUG
+    org.springframework.web.reactive.function.server: DEBUG
+    org.springframework.cloud.gateway: DEBUG
+    reactor.netty.http.server: DEBUG
+    # Optionally add your app package here
+    com.collicode.customer: DEBUG
