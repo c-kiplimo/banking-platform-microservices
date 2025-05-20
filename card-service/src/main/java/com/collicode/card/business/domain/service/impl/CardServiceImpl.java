@@ -34,6 +34,20 @@ public class CardServiceImpl implements CardService {
                 .flatMap(cardId -> createCard(Card.from(cardCommand, cardId)));
     }
 
+    @Override
+    public Mono<Card> updateCard(CardCommand cardCommand) {
+        return cardValidationService.findAccountByCardId(cardCommand.getCardId())
+                .map(existingCard -> existingCard.withAlias(cardCommand.getAlias()))
+                .flatMap(cardWriteAdapter::updateCard);
+    }
+
+    @Override
+    public Mono<Card> deleteCard(long cardId) {
+        return cardValidationService.findAccountByCardId(cardId)
+                .flatMap(cardWriteAdapter::deleteCard);
+    }
+
+
     public Mono<Card> createCard(Card card) {
         return cardValidationService.validateCardCreation(card.getAccountId(), card.getCardType().name())
                 .then(cardValidationService.checkDuplicateCard(card.getCardId().getCurrentId()))

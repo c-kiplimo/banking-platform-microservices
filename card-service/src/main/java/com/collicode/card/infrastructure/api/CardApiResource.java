@@ -11,12 +11,21 @@ import static org.springframework.web.reactive.function.server.RequestPredicates
 
 @Service
 public class CardApiResource {
+
     @Bean(name = "cardApiRoute")
     public RouterFunction<ServerResponse> routes(CardApiHandler cardApiHandler) {
         return RouterFunctions
                 .route(
                         POST(CardRoutes.CARD_ROUTE).and(accept(MediaType.APPLICATION_JSON)),
                         cardApiHandler::createCard
+                )
+                .andRoute(
+                        PUT(CardRoutes.CARD_ROUTE).and(accept(MediaType.APPLICATION_JSON)),
+                        cardApiHandler::updateCard
+                )
+                .andRoute(
+                        DELETE(CardRoutes.CARD_ROUTE).and(accept(MediaType.APPLICATION_JSON)),
+                        cardApiHandler::deleteCard
                 )
                 .andRoute(
                         GET(CardRoutes.CARD_BY_ID).and(accept(MediaType.APPLICATION_JSON)),

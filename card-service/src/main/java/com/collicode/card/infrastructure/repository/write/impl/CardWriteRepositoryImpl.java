@@ -19,4 +19,14 @@ public class CardWriteRepositoryImpl implements CardWriteRepository {
     public Mono<CardWriteModel> createCard(CardWriteModel cardWriteModel) {
         return r2dbcEntityTemplate.insert(cardWriteModel);
     }
+
+    @Override
+    public Mono<CardWriteModel> updateCard(CardWriteModel cardWriteModel) {
+        return r2dbcEntityTemplate.update(cardWriteModel);
+    }
+
+    @Override
+    public Mono<CardWriteModel> deleteCard(CardWriteModel cardWriteModel) {
+        return r2dbcEntityTemplate.delete(cardWriteModel);
+    }
 }

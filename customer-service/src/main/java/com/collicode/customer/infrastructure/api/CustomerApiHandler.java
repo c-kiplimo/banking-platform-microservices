@@ -17,8 +17,7 @@ import reactor.core.publisher.Mono;
 import java.time.LocalDate;
 import java.util.Optional;
 
-import static com.collicode.customer.infrastructure.api.CustomerConstants.CREATE;
-import static com.collicode.customer.infrastructure.api.CustomerConstants.CUSTOMER;
+import static com.collicode.customer.infrastructure.api.CustomerConstants.*;
 
 @Service
 public class CustomerApiHandler {
@@ -46,8 +45,49 @@ public class CustomerApiHandler {
                             .withOriginalApiRequest(request)
                             .build();
 
-                    return businessCommandRouterService
-                            .processCommand(commandWrapper);
+                    return businessCommandRouterService.processCommand(commandWrapper);
+                })
+                .transform(resultMono -> ResponseHandler.handleCommandResultMonoResponse(resultMono, auditInfo));
+    }
+
+    public Mono<ServerResponse> updateCustomer(ServerRequest serverRequest) {
+        AuditInfo auditInfo = AuditInfo.from(serverRequest);
+
+        return serverRequest.bodyToMono(String.class)
+                .flatMap(requestBody -> {
+                    TypeToken<ApiRequest<CustomerRequest>> typeToken = new TypeToken<>() {
+                    };
+                    ApiRequest<CustomerRequest> request = JsonHelper.toObject(requestBody, typeToken.getType());
+
+                    CommandWrapper<CustomerRequest> commandWrapper = CommandWrapper.<CustomerRequest>builder()
+                            .entityName(CUSTOMER)
+                            .actionName(UPDATE)
+                            .auditInfo(auditInfo)
+                            .withOriginalApiRequest(request)
+                            .build();
+
+                    return businessCommandRouterService.processCommand(commandWrapper);
+                })
+                .transform(resultMono -> ResponseHandler.handleCommandResultMonoResponse(resultMono, auditInfo));
+    }
+
+    public Mono<ServerResponse> deleteCustomer(ServerRequest serverRequest) {
+        AuditInfo auditInfo = AuditInfo.from(serverRequest);
+
+        return serverRequest.bodyToMono(String.class)
+                .flatMap(requestBody -> {
+                    TypeToken<ApiRequest<CustomerRequest>> typeToken = new TypeToken<>() {
+                    };
+                    ApiRequest<CustomerRequest> request = JsonHelper.toObject(requestBody, typeToken.getType());
+
+                    CommandWrapper<CustomerRequest> commandWrapper = CommandWrapper.<CustomerRequest>builder()
+                            .entityName(CUSTOMER)
+                            .actionName(DELETE)
+                            .auditInfo(auditInfo)
+                            .withOriginalApiRequest(request)
+                            .build();
+
+                    return businessCommandRouterService.processCommand(commandWrapper);
                 })
                 .transform(resultMono -> ResponseHandler.handleCommandResultMonoResponse(resultMono, auditInfo));
     }
@@ -65,11 +105,9 @@ public class CustomerApiHandler {
     public Mono<ServerResponse> fetchAllCustomers(ServerRequest serverRequest) {
         AuditInfo auditInfo = AuditInfo.from(serverRequest);
 
-
         Optional<String> nameOpt = serverRequest.queryParam("name");
         Optional<String> startDateStr = serverRequest.queryParam("startDate");
         Optional<String> endDateStr = serverRequest.queryParam("endDate");
-
 
         LocalDate startDate = startDateStr.map(LocalDate::parse).orElse(null);
         LocalDate endDate = endDateStr.map(LocalDate::parse).orElse(null);
@@ -79,5 +117,4 @@ public class CustomerApiHandler {
                 auditInfo
         );
     }
-
 }

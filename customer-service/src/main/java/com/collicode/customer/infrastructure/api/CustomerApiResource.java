@@ -26,6 +26,14 @@ public class CustomerApiResource {
                 .andRoute(
                         GET(CustomerRoutes.CUSTOMER_ROUTE).and(accept(MediaType.APPLICATION_JSON)),
                         customerApiHandler::fetchAllCustomers
+                )
+                .andRoute(
+                        PUT(CustomerRoutes.CUSTOMER_ROUTE).and(accept(MediaType.APPLICATION_JSON)),
+                        customerApiHandler::updateCustomer
+                )
+                .andRoute(
+                        DELETE(CustomerRoutes.CUSTOMER_ROUTE).and(accept(MediaType.APPLICATION_JSON)),
+                        customerApiHandler::deleteCustomer
                 );
     }
 }

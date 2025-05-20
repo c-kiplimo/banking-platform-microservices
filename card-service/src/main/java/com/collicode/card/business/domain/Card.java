@@ -57,6 +57,18 @@ public class Card extends BusinessEntity {
         ifTrue(this.cvv.length() != 3, invalidEntryException(ENTITYNAME, "CVV"));
     }
 
+    public Card withAlias(String alias) {
+        return Card.builder()
+                .cardId(this.cardId)
+                .alias(alias)
+                .accountId(this.accountId)
+                .cardType(this.cardType)
+                .pan(this.pan)
+                .cvv(this.cvv)
+                .build();
+    }
+
+
     public static class CardBuilder {
         private CardId cardId;
         private String alias;

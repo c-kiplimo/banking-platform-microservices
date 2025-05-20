@@ -17,8 +17,7 @@ import reactor.core.publisher.Mono;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.collicode.account.infrastructure.api.AccountConstants.ACCOUNT;
-import static com.collicode.account.infrastructure.api.AccountConstants.CREATE;
+import static com.collicode.account.infrastructure.api.AccountConstants.*;
 
 @Service
 public class AccountApiHandler {
@@ -48,8 +47,7 @@ public class AccountApiHandler {
                             .withOriginalApiRequest(request)
                             .build();
 
-                    return businessCommandRouterService
-                            .processCommand(commandWrapper);
+                    return businessCommandRouterService.processCommand(commandWrapper);
                 })
                 .transform(resultMono -> ResponseHandler.handleCommandResultMonoResponse(resultMono, auditInfo));
     }
@@ -70,11 +68,33 @@ public class AccountApiHandler {
 
         serverRequest.queryParam("iban").ifPresent(value -> filters.put("iban", value));
         serverRequest.queryParam("bicSwift").ifPresent(value -> filters.put("bicSwift", value));
-        serverRequest.queryParam("cardAlias").ifPresent(value -> filters.put("cardAlias", value)); // Optional: ensure field is mapped in your model
+        serverRequest.queryParam("cardAlias").ifPresent(value -> filters.put("cardAlias", value));
 
         return ResponseHandler.handleFluxResponse(
                 accountQueryService.fetchAllAccounts(filters),
                 auditInfo
         );
     }
+
+    public Mono<ServerResponse> deleteAccount(ServerRequest serverRequest) {
+        AuditInfo auditInfo = AuditInfo.from(serverRequest);
+
+        return serverRequest.bodyToMono(String.class)
+                .flatMap(requestBody -> {
+                    TypeToken<ApiRequest<AccountRequest>> typeToken = new TypeToken<>() {
+                    };
+                    ApiRequest<AccountRequest> request = JsonHelper.toObject(requestBody, typeToken.getType());
+
+                    CommandWrapper<AccountRequest> commandWrapper = CommandWrapper.<AccountRequest>builder()
+                            .entityName(ACCOUNT)
+                            .actionName(DELETE)
+                            .auditInfo(auditInfo)
+                            .withOriginalApiRequest(request)
+                            .build();
+
+                    return businessCommandRouterService.processCommand(commandWrapper);
+                })
+                .transform(resultMono -> ResponseHandler.handleCommandResultMonoResponse(resultMono, auditInfo));
+    }
+
 }

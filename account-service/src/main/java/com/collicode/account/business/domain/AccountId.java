@@ -9,7 +9,7 @@ public class AccountId extends Identity<AccountId, Long, Long> {
     private static final long END_POINT = 9_999_999_999L;
     private static final long DEFAULT_FACTOR = 5L;
 
-    private AccountId(Long currentId, Long factor) {
+    AccountId(Long currentId, Long factor) {
         super(validateStart(currentId), validateFactor(factor));
     }
 

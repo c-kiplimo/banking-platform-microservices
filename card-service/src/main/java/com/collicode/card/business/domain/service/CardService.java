@@ -6,4 +6,8 @@ import reactor.core.publisher.Mono;
 
 public interface CardService {
     Mono<Card> createCard(CardCommand cardCommand);
+
+    Mono<Card> updateCard(CardCommand cardCommand);
+
+    Mono<Card> deleteCard(long cardId);
 }

@@ -5,4 +5,8 @@ import reactor.core.publisher.Mono;
 
 public interface CustomerWriteAdapter {
     Mono<Customer> createCustomer(Customer customer);
+
+    Mono<Customer> updateCustomer(Customer customer);
+
+    Mono<Customer> deleteCustomer(Customer customer);
 }

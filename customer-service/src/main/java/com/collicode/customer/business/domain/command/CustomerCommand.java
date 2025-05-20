@@ -6,6 +6,7 @@ import lombok.Getter;
 @Builder
 @Getter
 public class CustomerCommand {
+    private long customerId;
     private String firstName;
     private String lastName;
     private String otherName;

@@ -6,4 +6,8 @@ import reactor.core.publisher.Mono;
 
 public interface CustomerService {
     Mono<Customer> createCustomer(CustomerCommand customerCommand);
+
+    Mono<Customer> updateCustomer(CustomerCommand customerCommand);
+
+    Mono<Customer> deleteCustomer(long customerId);
 }

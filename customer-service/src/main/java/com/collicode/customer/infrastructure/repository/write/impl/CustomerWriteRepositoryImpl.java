@@ -18,4 +18,14 @@ public class CustomerWriteRepositoryImpl implements CustomerWriteRepository {
     public Mono<CustomerWriteModel> createCustomer(CustomerWriteModel customerWriteModel) {
         return r2dbcEntityTemplate.insert(customerWriteModel);
     }
+
+    @Override
+    public Mono<CustomerWriteModel> deleteCustomer(CustomerWriteModel customerWriteModel) {
+        return r2dbcEntityTemplate.delete(customerWriteModel);
+    }
+
+    @Override
+    public Mono<CustomerWriteModel> updateCustomer(CustomerWriteModel customerWriteModel) {
+        return r2dbcEntityTemplate.update(customerWriteModel);
+    }
 }

@@ -15,8 +15,7 @@ public class CustomerOutwardService implements CustomerWriteAdapter {
         this.customerWriteRepository = customerWriteRepository;
     }
 
-    @Override
-    public Mono<Customer> createCustomer(Customer customer) {
+    private static CustomerWriteModel getCustomerWriteModel(Customer customer) {
         CustomerWriteModel customerWriteModel = CustomerWriteModel
                 .builder()
                 .recordId(customer.getCustomerId().getCurrentId())
@@ -24,7 +23,27 @@ public class CustomerOutwardService implements CustomerWriteAdapter {
                 .lastName(customer.getLastName())
                 .otherName(customer.getOtherName())
                 .build();
+        return customerWriteModel;
+    }
+
+    @Override
+    public Mono<Customer> createCustomer(Customer customer) {
+        CustomerWriteModel customerWriteModel = getCustomerWriteModel(customer);
         return customerWriteRepository.createCustomer(customerWriteModel)
+                .thenReturn(customer);
+    }
+
+    @Override
+    public Mono<Customer> updateCustomer(Customer customer) {
+        CustomerWriteModel customerWriteModel = getCustomerWriteModel(customer);
+        return customerWriteRepository.updateCustomer(customerWriteModel)
+                .thenReturn(customer);
+    }
+
+    @Override
+    public Mono<Customer> deleteCustomer(Customer customer) {
+        CustomerWriteModel customerWriteModel = getCustomerWriteModel(customer);
+        return customerWriteRepository.deleteCustomer(customerWriteModel)
                 .thenReturn(customer);
     }
 }

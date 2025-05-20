@@ -1,6 +1,7 @@
 package com.collicode.customer.infrastructure.repository.model.read;
 
 
+import lombok.Builder;
 import lombok.Data;
 import org.springframework.data.relational.core.mapping.Table;
 
@@ -8,6 +9,7 @@ import java.time.LocalDateTime;
 
 @Table("customer")
 @Data
+@Builder
 public class CustomerReadModel {
     private long recordId;
     private String firstName;

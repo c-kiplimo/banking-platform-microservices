@@ -5,4 +5,8 @@ import reactor.core.publisher.Mono;
 
 public interface CardWriteAdapter {
     Mono<Card> createCard(Card card);
+
+    Mono<Card> updateCard(Card card);
+
+    Mono<Card> deleteCard(Card cardId);
 }

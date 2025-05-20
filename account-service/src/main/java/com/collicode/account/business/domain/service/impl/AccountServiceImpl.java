@@ -35,7 +35,8 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public Mono<Void> deleteAccount(long accountId) {
-        return null;
+        return accountValidationService.findAccountByAccountId(accountId)
+                .flatMap(accountWriteAdapter::deleteAccount);
     }
 
     public Mono<Account> createAccount(Account account) {
@@ -56,4 +57,5 @@ public class AccountServiceImpl implements AccountService {
                         )
                         .thenReturn(AccountId.initialId()));
     }
+
 }

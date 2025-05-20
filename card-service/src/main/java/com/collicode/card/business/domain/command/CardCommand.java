@@ -7,9 +7,11 @@ import lombok.Getter;
 @Builder
 @Getter
 public class CardCommand {
-    private final String alias;
-    private final long accountId;
-    private final CardType cardType;
-    private final String pan;
-    private final String cvv;
+    private long cardId;
+    private String alias;
+    private long accountId;
+    private CardType cardType;
+    private String pan;
+    private String cvv;
+
 }

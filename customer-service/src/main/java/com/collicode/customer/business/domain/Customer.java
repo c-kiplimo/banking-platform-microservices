@@ -45,6 +45,16 @@ public class Customer extends BusinessEntity {
         ifHasNoText(this.lastName, missingKeyException(ENTITYNAME, "LastName"));
     }
 
+    public Customer withNames(String firstName, String lastName, String otherName) {
+        return Customer.builder()
+                .customerId(this.customerId)
+                .firstName(firstName != null ? firstName : this.firstName)
+                .lastName(lastName != null ? lastName : this.lastName)
+                .otherName(otherName != null ? otherName : this.otherName)
+                .build();
+    }
+
+
     public static class CustomerBuilder {
         private CustomerId customerId;
         private String firstName;

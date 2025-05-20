@@ -25,6 +25,10 @@ public class AccountApiResource {
                 .andRoute(
                         GET(AccountRoutes.ACCOUNT_ROUTE).and(accept(MediaType.APPLICATION_JSON)),
                         accountApiHandler::fetchAllAccounts
+                )
+                .andRoute(
+                        DELETE(AccountRoutes.ACCOUNT_ROUTE).and(accept(MediaType.APPLICATION_JSON)),
+                        accountApiHandler::deleteAccount
                 );
     }
 }

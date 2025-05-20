@@ -31,6 +31,20 @@ public class CustomerServiceImpl implements CustomerService {
                 );
     }
 
+    @Override
+    public Mono<Customer> updateCustomer(CustomerCommand customerCommand) {
+        return customerValidationService.findCustomerByCustomerId(customerCommand.getCustomerId()) // fetch existing customer
+                .map(existingCustomer -> existingCustomer.withNames(customerCommand.getFirstName(), customerCommand.getLastName(), customerCommand.getOtherName()))
+                .flatMap(customerWriteAdapter::updateCustomer);
+    }
+
+
+    @Override
+    public Mono<Customer> deleteCustomer(long customerId) {
+        return customerValidationService.findCustomerByCustomerId(customerId)
+                .flatMap(customerWriteAdapter::deleteCustomer);
+    }
+
 
     public Mono<Customer> createCustomer(Customer customer) {
         return customerValidationService.checkDuplicateCustomer(
