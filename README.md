@@ -74,8 +74,7 @@ The platform consists of the following components:
 
 1. **Comprehensive Testing Strategy**:
     - Business logic tests with JUnit 5
-    - Infrastructure layer tests (repositories, controllers)
-    - Integration tests with Testcontainers
+    - Infrastructure layer tests (repositories)
     - Test coverage for all critical paths
 
 2. **Pagination and Filtering**:
@@ -104,7 +103,6 @@ The platform consists of the following components:
 - Java 17+
 - Maven 3.4+
 - PostgreSQL 16+
-- Docker (for Testcontainers and optional deployment)
 
 ### Installation
 
